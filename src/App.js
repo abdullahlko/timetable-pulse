@@ -7,10 +7,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home page */}
         <Route path="/" element={<Home />} />
-
-        {/* Timetable page */}
         <Route path="/timetable" element={<Timetable />} />
       </Routes>
     </BrowserRouter>

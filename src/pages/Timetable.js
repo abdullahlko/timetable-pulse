@@ -3,21 +3,22 @@ import { useNavigate } from "react-router-dom";
 import Header from "../Components/Header";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { days, periodTimes, periods } from "../constants/timetable";
+import Swal from "sweetalert2";
 
 const Timetable = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
 
-const [timetable, setTimetable] = useState(() => {
-  // check if saved timetable exists in localStorage
-  const saved = localStorage.getItem("timetable");
-  if (saved) return JSON.parse(saved);
-  // else use default timetable
-  return days.map((day) => {
-    const numPeriods = day === "Saturday" ? 4 : periods;
-    return Array(numPeriods).fill(0).map(() => ({ subject: "", room: "" }));
+  const [timetable, setTimetable] = useState(() => {
+    // check if saved timetable exists in localStorage
+    const saved = localStorage.getItem("timetable");
+    if (saved) return JSON.parse(saved);
+    // else use default timetable
+    return days.map((day) => {
+      const numPeriods = day === "Saturday" ? 4 : periods;
+      return Array(numPeriods).fill(0).map(() => ({ subject: "", room: "" }));
+    });
   });
-});
 
 
   const [tempTimetable, setTempTimetable] = useState([]);
@@ -31,7 +32,7 @@ const [timetable, setTimetable] = useState(() => {
 
   const handleSave = () => {
     setTimetable(tempTimetable);
-     localStorage.setItem("timetable", JSON.stringify(tempTimetable));
+    localStorage.setItem("timetable", JSON.stringify(tempTimetable));
     setIsEditing(false);
   };
 
@@ -43,6 +44,40 @@ const [timetable, setTimetable] = useState(() => {
       [field]: value,
     };
     setTempTimetable(newTemp);
+  };
+
+  const handleClear = () => {
+    const clearedTimetable = days.map((day) => {
+      const numPeriods = day === "Saturday" ? 4 : periods;
+      return Array(numPeriods)
+        .fill(0)
+        .map(() => ({ subject: "", room: "" }));
+    });
+
+    setTempTimetable(clearedTimetable); // update the temporary timetable
+  };
+
+  const handleClearClick = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will clear the entire timetable!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, clear it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleClear();
+      }
+    });
+  };
+
+  const isTimetableEmpty = (temp) => {
+    return temp.every((day) =>
+      day.every((period) => period.subject === "" && period.room === ""),
+    );
   };
 
   const headerHeight = 200;
@@ -69,7 +104,7 @@ const [timetable, setTimetable] = useState(() => {
           Weekly Timetable
         </h1>
 
-        <div className="ml-auto flex gap-2">
+        <div className="ml-auto flex gap-4">
           {!isEditing ? (
             <button
               onClick={handleEdit}
@@ -85,6 +120,19 @@ const [timetable, setTimetable] = useState(() => {
               >
                 Cancel
               </button>
+
+              <button
+                onClick={handleClearClick}
+                className={`px-4 py-1 rounded text-white ${
+                  isTimetableEmpty(tempTimetable)
+                    ? "bg-red-300 cursor-not-allowed" // disabled style
+                    : "bg-red-500 hover:bg-red-600"
+                }`}
+                disabled={isTimetableEmpty(tempTimetable)} // disable button
+              >
+                Clear
+              </button>
+
               <button
                 onClick={handleSave}
                 className="px-4 py-1 bg-green-500 text-white rounded hover:bg-green-600"

@@ -5,7 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { days, periodTimes, periods } from "../constants/timetable";
 import Swal from "sweetalert2";
 
-const Timetable = () => {
+const Timetable = ({setHasTimetable}) => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -23,6 +23,12 @@ const Timetable = () => {
 
   const [tempTimetable, setTempTimetable] = useState([]);
 
+    const isTimetableEmpty = (temp) => {
+    return temp.every((day) =>
+      day.every((period) => period.subject === "" && period.room === ""),
+    );
+  };
+
   const handleEdit = () => {
     setTempTimetable(JSON.parse(JSON.stringify(timetable)));
     setIsEditing(true);
@@ -34,6 +40,7 @@ const Timetable = () => {
     setTimetable(tempTimetable);
     localStorage.setItem("timetable", JSON.stringify(tempTimetable));
     setIsEditing(false);
+    setHasTimetable(!isTimetableEmpty(tempTimetable));
   };
 
   const handleCellChange = (dayIndex, periodIndex, field, value) => {
@@ -74,11 +81,6 @@ const Timetable = () => {
     });
   };
 
-  const isTimetableEmpty = (temp) => {
-    return temp.every((day) =>
-      day.every((period) => period.subject === "" && period.room === ""),
-    );
-  };
 
   const headerHeight = 200;
   const breakRowHeight = 40;

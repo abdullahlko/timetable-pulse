@@ -1,10 +1,10 @@
-import React from 'react'
+import React, {useState,useEffect} from 'react'
 import Header from '../Components/Header'
 
-const Home = () => {
+const Home = ({hasTimetable}) => {
   return (
     <div>
-      <Header variant="home" />
+       <Header variant="home" hasTimetable={hasTimetable} />
 
       <main className="p-5">
         <p className="text-gray-600">

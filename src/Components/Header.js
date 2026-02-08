@@ -7,6 +7,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 
 const Header = ({ variant = 'home', hasTimetable = false }) => {
   const navigate = useNavigate()
+  const [toggle, setToggle] = useState(false)
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef(null);
@@ -35,7 +36,9 @@ const Header = ({ variant = 'home', hasTimetable = false }) => {
     ? 'View Timetable'
     : 'Add Timetable'
 
-  return (
+const handleToggle = () => { setToggle(!toggle); } 
+  
+return (
     <header className="bg-blue-500 shadow-lg">
       <div className="flex items-center justify-between py-4 px-5">
         {/* LEFT: Logo + App Name */}
@@ -70,8 +73,20 @@ const Header = ({ variant = 'home', hasTimetable = false }) => {
             </button>
 
               {openDropdown && (
-                <div className="absolute right-0 mt-2 w-60 bg-white rounded shadow-lg border z-10">
-                  <div className="p-4 text-black">Settings Content</div>
+                <div className="absolute right-0 mt-2 w-60 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg border z-10">
+                  <div className="flex items-center justify-between px-4 py-3 text-black">
+                  Notifications
+                    <button 
+                      onClick={handleToggle}
+                      className={`ml-2 w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 cursor-pointer ${toggle ? 'bg-green-500' : 'bg-gray-300'}`}
+                    >
+                      <div
+                        className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-transform duration-300 ${
+                          toggle ? 'translate-x-5' : 'translate-x-0'
+                        }`}
+                      ></div>
+                    </button>
+                  </div>
                 </div>
               )}
 

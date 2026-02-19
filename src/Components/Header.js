@@ -20,7 +20,7 @@ const Header = ({ variant = "home" }) => {
             <img src={logo} alt="Logo" className="w-14 h-14" />
             <div className="flex flex-col">
               <span className="text-3xl font-bold text-white leading-none">
-                WhatsNext
+                TimetablePulse
               </span>
               <span className="text-sm text-white/80 mt-1">
                 Manage your weekly class schedule effortlessly

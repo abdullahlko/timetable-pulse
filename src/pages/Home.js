@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../Components/Header";
 import ClassCard from "../Components/ClassCard";
@@ -72,57 +72,59 @@ const Home = () => {
   };
 
   // Updates current class, next class, and countdown based on system time
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      let current = null;
-      let next = null;
+  const calculateSchedule = useCallback(() => {
+    const now = new Date();
+    let current = null;
+    let next = null;
 
-      for (let i = 0; i < existingPeriods.length; i++) {
-        const actualIdx = existingPeriods[i].periodIndex;
-        const [startStr, endStr] = periodTimes[actualIdx].split(" - ");
-        const start = parseTime(startStr);
-        const end = parseTime(endStr);
+    for (let i = 0; i < existingPeriods.length; i++) {
+      const actualIdx = existingPeriods[i].periodIndex;
+      const [startStr, endStr] = periodTimes[actualIdx].split(" - ");
+      const start = parseTime(startStr);
+      const end = parseTime(endStr);
 
-        if (now >= start && now < end) {
-          current = i;
-          next = i + 1 < existingPeriods.length ? i + 1 : null;
-          break;
-        } else if (now < start) {
-          next = i;
-          break;
-        }
+      if (now >= start && now < end) {
+        current = i;
+        next = i + 1 < existingPeriods.length ? i + 1 : null;
+        break;
+      } else if (now < start) {
+        next = i;
+        break;
       }
+    }
 
-      setCurrentIndex(current);
-      setNextIndex(next);
+    setCurrentIndex(current);
+    setNextIndex(next);
 
-      const formatTime = (seconds) => {
-        const hrs = Math.floor(seconds / 3600);
-        const mins = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-        return `${hrs > 0 ? `${String(hrs).padStart(2, "0")}h ` : ""}${String(mins).padStart(2, "0")}m ${String(secs).padStart(2, "0")}s`;
-      };
+    const formatTime = (seconds) => {
+      const hrs = Math.floor(seconds / 3600);
+      const mins = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      return `${hrs > 0 ? `${String(hrs).padStart(2, "0")}h ` : ""}${String(mins).padStart(2, "0")}m ${String(secs).padStart(2, "0")}s`;
+    };
 
-      if (current !== null) {
-        const endTime = parseTime(
-          periodTimes[existingPeriods[current].periodIndex].split(" - ")[1]
-        );
-        const diff = Math.max(0, Math.floor((endTime - now) / 1000));
-        setTimerText(formatTime(diff));
-      } else if (next !== null) {
-        const startTime = parseTime(
-          periodTimes[existingPeriods[next].periodIndex].split(" - ")[0]
-        );
-        const diff = Math.max(0, Math.floor((startTime - now) / 1000));
-        setTimerText(formatTime(diff));
-      } else {
-        setTimerText("");
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
+    if (current !== null) {
+      const endTime = parseTime(
+        periodTimes[existingPeriods[current].periodIndex].split(" - ")[1]
+      );
+      const diff = Math.max(0, Math.floor((endTime - now) / 1000));
+      setTimerText(formatTime(diff));
+    } else if (next !== null) {
+      const startTime = parseTime(
+        periodTimes[existingPeriods[next].periodIndex].split(" - ")[0]
+      );
+      const diff = Math.max(0, Math.floor((startTime - now) / 1000));
+      setTimerText(formatTime(diff));
+    } else {
+      setTimerText("");
+    }
   }, [existingPeriods]);
+
+  useLayoutEffect(() => {
+    calculateSchedule();
+    const interval = setInterval(calculateSchedule, 1000);
+    return () => clearInterval(interval);
+  }, [calculateSchedule]);
 
   const isAllClassesCompleted =
     existingPeriods.length > 0 && currentIndex === null && nextIndex === null;
@@ -153,7 +155,7 @@ const Home = () => {
       ) : isSunday ? (
         /* Sunday state */
         <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-8 gap-2 bg-white rounded-xl shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-800">It’s Sunday!</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">It's Sunday!</h2>
           <p className="text-lg text-gray-700">No classes today</p>
         </div>
 
@@ -267,7 +269,7 @@ const Home = () => {
                         <td className="p-2 border border-gray-300">{period.periodIndex + 1}</td>
                         <td className="p-2 border border-gray-300">{period.subject}</td>
                         <td className="p-2 border border-gray-300">{period.room}</td>
-                        <td className="p-2 border border-gray-300">{periodTimes[period.periodIndex]}</td>
+                        <td className="p-2 border border-gray-300 whitespace-nowrap">{periodTimes[period.periodIndex]}</td>
                       </tr>
                     );
                   })}
@@ -277,7 +279,7 @@ const Home = () => {
           )}
 
           {existingPeriods.length === 0 && (
-            <div className="text-center text-gray-500 mt-4">
+            <div className="flex-1 flex items-center justify-center text-gray-500">
               No classes scheduled for today.
             </div>
           )}
@@ -326,7 +328,7 @@ const Home = () => {
                           <td className="p-2 border border-gray-300">{period.periodIndex + 1}</td>
                           <td className="p-2 border border-gray-300">{period.subject}</td>
                           <td className="p-2 border border-gray-300">{period.room}</td>
-                          <td className="p-2 border border-gray-300">{periodTimes[period.periodIndex]}</td>
+                          <td className="p-2 border border-gray-300 whitespace-nowrap">{periodTimes[period.periodIndex]}</td>
                         </tr>
                       ))}
                     </tbody>

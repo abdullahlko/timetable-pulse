@@ -132,7 +132,7 @@ const Timetable = () => {
         </div>
 
         {/* Mobile title row */}
-        <div className="sm:hidden w-full bg-gray-100  border-gray-300">
+        <div className="sm:hidden w-full bg-gray-100 border-gray-300">
           <div className="max-w-screen-md mx-auto py-3 text-center">
             <h1 className="text-xl font-semibold underline">
               Weekly Timetable
@@ -149,7 +149,7 @@ const Timetable = () => {
               <th className="border px-3 py-1 text-center">Day</th>
               {periodTimes.map((time, i) => (
                 <React.Fragment key={i}>
-                  <th className="border px-4 py-1 whitespace-nowrap text-center">
+                  <th className="border px-6 py-1 whitespace-nowrap text-center">
                     P{i + 1}
                     <div className="text-[10px] text-gray-500 text-center">{time.split(" - ")[0]}</div>
                   </th>
@@ -171,7 +171,6 @@ const Timetable = () => {
                 className={!isEditing ? "hover:bg-gray-100" : ""}
                 style={{ height: "64px" }}
               >
-                {/* Shortened day name */}
                 <td className="border p-1 font-semibold bg-gray-50">{day.slice(0, 3)}</td>
 
                 {(timetable[dayIndex] || []).map((_, periodIndex) => {
@@ -179,7 +178,7 @@ const Timetable = () => {
 
                   return (
                     <React.Fragment key={periodIndex}>
-                      <td className={`border px-4 py-1 ${isEditing ? "hover:bg-yellow-100" : ""}`}>
+                      <td className={`border px-1 py-1 ${isEditing ? "hover:bg-yellow-100" : ""}`}>
                         {isEditing ? (
                           <div className="flex flex-col justify-center items-center gap-1 h-full">
                             <input
@@ -188,7 +187,7 @@ const Timetable = () => {
                               maxLength={10}
                               value={cell.subject}
                               onChange={e => handleCellChange(dayIndex, periodIndex, "subject", e.target.value)}
-                              className="border text-xs p-0.5 px-1 w-full text-center min-w-[56px]"
+                              className="border text-xs p-0.5 px-1 w-full text-center"
                             />
                             <input
                               type="text"
@@ -196,11 +195,11 @@ const Timetable = () => {
                               maxLength={5}
                               value={cell.room}
                               onChange={e => handleCellChange(dayIndex, periodIndex, "room", e.target.value)}
-                              className="border text-xs p-0.5 px-1 w-full text-center min-w-[40px]"
+                              className="border text-xs p-0.5 px-1 w-full text-center"
                             />
                           </div>
                         ) : (
-                          <div className="flex flex-col justify-center items-center h-full gap-0">
+                          <div className="flex flex-col justify-center items-center h-full gap-0 px-1">
                             {cell.subject && <span className="text-xs sm:text-sm">{cell.subject}</span>}
                             {cell.room && <strong className="text-xs sm:text-sm">{`[${cell.room}]`}</strong>}
                           </div>

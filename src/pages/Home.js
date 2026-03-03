@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Header from "../Components/Header";
 import ClassCard from "../Components/ClassCard";
 import Footer from "../Components/Footer";
-import SchoolIcon from "@mui/icons-material/School";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { days, periodTimes } from "../constants/timetable";
@@ -171,14 +170,8 @@ const Home = () => {
                 <span className="text-gray-700 text-sm mt-1">{todayDate}</span>
               </div>
 
-              <div className="flex items-center gap-1 bg-blue-50 text-blue-600 text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
-                <SchoolIcon fontSize="small" />
-                <span>
-                  {totalClassesToday}
-                  <span className="ml-1 opacity-70">
-                    {totalClassesToday === 1 ? "class" : "classes"} today
-                  </span>
-                </span>
+              <div className="bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1.5 rounded-full border border-blue-100">
+                {totalClassesToday} {totalClassesToday === 1 ? "class" : "classes"} today
               </div>
             </div>
           )}
@@ -194,14 +187,8 @@ const Home = () => {
                 Today's Schedule
               </h1>
 
-              <div className="absolute right-5 top-1/2 -translate-y-1/2 flex items-center gap-1 bg-blue-50 text-blue-600 text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
-                <SchoolIcon fontSize="small" />
-                <span>
-                  {totalClassesToday}
-                  <span className="ml-1 opacity-70">
-                    {totalClassesToday === 1 ? "class" : "classes"} today
-                  </span>
-                </span>
+              <div className="bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1.5 rounded-full border border-blue-100">
+                {totalClassesToday} {totalClassesToday === 1 ? "class" : "classes"} today
               </div>
             </div>
           )}
@@ -279,7 +266,7 @@ const Home = () => {
           )}
 
           {existingPeriods.length === 0 && (
-            <div className="flex-1 flex items-center justify-center text-gray-500">
+            <div className="flex-1 flex items-center justify-center text-gray-500 -mt-16">
               No classes scheduled for today.
             </div>
           )}

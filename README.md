@@ -6,18 +6,13 @@ TimetablePulse is a real-time class schedule tracker. It shows your current and 
 
 ## Screenshots
 
-**Desktop - Home Page**  
-![Home Desktop](assets/screenshots/homepage-desktop.png)  
+| Desktop - Home Page | Desktop - Timetable Page |
+|---|---|
+| <img src="assets/screenshots/homepage-desktop.png" width="400"/> | <img src="assets/screenshots/timetablepage-desktop.png" width="400"/> |
 
-**Desktop - Timetable Page**  
-![Timetable Desktop](assets/screenshots/timetablepage-desktop.png)  
-
-**Mobile - Home Page**  
-![Home Mobile](assets/screenshots/homepage-mobile.jpg)  
-
-**Mobile - PWA Home Screen**  
-![PWA Mobile](assets/screenshots/pwa-icon-mobile.jpg)  
-
+| Mobile - Home Page | Mobile - PWA Home Screen |
+|---|---|
+| <img src="assets/screenshots/homepage-mobile.jpg" width="250"/> | <img src="assets/screenshots/pwa-icon-mobile.jpg" width="250"/> |
 ---
 
 ## Features
